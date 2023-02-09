@@ -1,0 +1,35 @@
+<script setup lang="ts">
+import PageMenu from './components/PageMenu.vue'
+import PageHeader from './components/PageHeader.vue'
+
+const collapsed = ref(false)
+</script>
+
+<template>
+  <n-layout has-sider class="z-layout">
+    <n-layout-sider
+      bordered
+      show-trigger
+      collapse-mode="width"
+      :collapsed="collapsed"
+      @collapse="collapsed = true"
+      @expand="collapsed = false"
+    >
+      <PageMenu :collapsed="collapsed" />
+    </n-layout-sider>
+    <n-layout>
+      <n-layout-header>
+        <PageHeader />
+      </n-layout-header>
+      <n-layout-content content-style="padding: 15px;">
+        <router-view />
+      </n-layout-content>
+    </n-layout>
+  </n-layout>
+</template>
+
+<style scoped>
+.z-layout {
+  --header-height: 55px;
+}
+</style>
