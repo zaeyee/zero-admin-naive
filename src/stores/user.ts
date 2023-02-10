@@ -1,9 +1,14 @@
 import type { RouteRecordRaw } from 'vue-router'
 
-import { login, getInfo } from '@/api/user'
+// import { login, getInfo } from '@/api/user'
 import { filterRoutes } from '@/utils/auth'
 import constantRoutes from '@/router/constant'
 import asyncRoutes from '@/router/async'
+
+export interface LoginForm {
+  username: string
+  password: string
+}
 
 export interface UserState {
   token: string
@@ -21,15 +26,21 @@ export const useUserStore = defineStore('user', {
   }),
   actions: {
     // 登录
-    async login(userForm: unknown) {
-      const { data } = await login(userForm)
-      const { token } = data
+    async login(userForm: LoginForm) {
+      // const { data } = await login(userForm)
+      // const { token } = data
+      const token = userForm.username + userForm.password
       this.token = token
       localStorage.setItem('token', token)
     },
     // 获取用户信息
     async getInfo() {
-      const { data } = await getInfo()
+      // const { data } = await getInfo()
+      const data = {
+        roles: ['admin'],
+        username: 'admin',
+        nickname: 'ADMIN'
+      }
       const { roles, ...profile } = data
       if (!roles || roles.length <= 0) {
         throw new Error('用户至少需要有一个角色')
@@ -44,7 +55,7 @@ export const useUserStore = defineStore('user', {
       localStorage.removeItem('token')
     },
     // 基于角色生成可访问的异步路由
-    generateRoutes(roles: RouteRecordRaw[]) {
+    generateRoutes(roles: string[]) {
       const newAsyncRoutes = filterRoutes(asyncRoutes, roles)
       this.routes = [...constantRoutes, ...newAsyncRoutes]
       return newAsyncRoutes
