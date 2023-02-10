@@ -27,6 +27,7 @@ export default [
   },
   {
     path: '/system',
+    name: 'System',
     component: Layout,
     meta: {
       title: '系统管理'
