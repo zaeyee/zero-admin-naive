@@ -11,6 +11,7 @@ const collapsed = ref(false)
     <n-layout-sider
       bordered
       show-trigger
+      width="210"
       collapse-mode="width"
       :collapsed="collapsed"
       @collapse="collapsed = true"

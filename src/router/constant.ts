@@ -9,20 +9,6 @@ export default [
       hidden: true
     }
   },
-  // {
-  //   path: '/404',
-  //   component: () => import('@/views/error-page/404'),
-  //   meta: {
-  //     hidden: true
-  //   }
-  // },
-  // {
-  //   path: '/401',
-  //   component: () => import('@/views/error-page/401'),
-  //   meta: {
-  //     hidden: true
-  //   }
-  // },
   {
     path: '/',
     redirect: '/dashboard',
@@ -38,20 +24,38 @@ export default [
         }
       }
     ]
+  },
+  {
+    path: '/system',
+    component: Layout,
+    meta: {
+      title: '系统管理'
+    },
+    children: [
+      {
+        path: 'role',
+        name: 'Role',
+        component: () => import('@/views/dashboard.vue'),
+        meta: {
+          title: '角色管理'
+        }
+      },
+      {
+        path: 'user',
+        name: 'User',
+        component: () => import('@/views/dashboard.vue'),
+        meta: {
+          title: '用户管理'
+        }
+      },
+      {
+        path: 'menu',
+        name: 'Menu',
+        component: () => import('@/views/dashboard.vue'),
+        meta: {
+          title: '菜单管理'
+        }
+      }
+    ]
   }
-  // {
-  //   path: '/examples',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'permission',
-  //       name: 'Permission',
-  //       component: () => import('@/views/examples/permission.vue'),
-  //       meta: {
-  //         title: '权限验证',
-  //         icon: 'i-ep-house'
-  //       }
-  //     }
-  //   ]
-  // }
 ]
