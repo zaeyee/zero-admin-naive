@@ -4,7 +4,7 @@ import Layout from '@/layout/Layout.vue'
 export default [
   {
     path: '/login',
-    component: () => import('@/views/login/index.vue'),
+    component: () => import('@/views/login.vue'),
     meta: {
       hidden: true
     }
@@ -31,7 +31,7 @@ export default [
       {
         path: 'dashboard',
         name: 'Dashboard',
-        component: () => import('@/views/index/index.vue'),
+        component: () => import('@/views/dashboard.vue'),
         meta: {
           title: '控制台',
           icon: 'i-ep-house'
