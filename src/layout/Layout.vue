@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PageLogo from './components/PageLogo.vue'
 import PageMenu from './components/PageMenu.vue'
 import PageHeader from './components/PageHeader.vue'
 
@@ -6,7 +7,7 @@ const collapsed = ref(false)
 </script>
 
 <template>
-  <n-layout has-sider class="z-layout">
+  <n-layout has-sider class="z-layout h-100vh">
     <n-layout-sider
       bordered
       show-trigger
@@ -15,6 +16,7 @@ const collapsed = ref(false)
       @collapse="collapsed = true"
       @expand="collapsed = false"
     >
+      <PageLogo />
       <PageMenu :collapsed="collapsed" />
     </n-layout-sider>
     <n-layout>
