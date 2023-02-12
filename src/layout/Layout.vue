@@ -14,7 +14,6 @@ const collapsed = ref(false)
 <template>
   <n-layout has-sider class="z-layout h-100vh">
     <n-layout-sider
-      bordered
       show-trigger
       width="210"
       collapse-mode="width"
@@ -27,7 +26,7 @@ const collapsed = ref(false)
       <PageMenu :collapsed="collapsed" />
     </n-layout-sider>
     <n-layout embedded>
-      <n-layout-header class="flex justify-between items-center h-$header-height px-1.6 shadow-2xl">
+      <n-layout-header class="flex justify-between items-center h-$z-header-height px-1.6">
         <div flex items-center>
           <Hamburger v-model="collapsed" />
           <Breadcrumb />
@@ -39,7 +38,7 @@ const collapsed = ref(false)
           <ToolSetting />
         </div>
       </n-layout-header>
-      <n-layout-content content-style="padding: 15px;">
+      <n-layout-content embedded content-style="padding: 10px">
         <router-view />
       </n-layout-content>
     </n-layout>
@@ -48,6 +47,6 @@ const collapsed = ref(false)
 
 <style scoped>
 .z-layout {
-  --header-height: 55px;
+  --z-header-height: 55px;
 }
 </style>
