@@ -20,7 +20,7 @@ export default [
         component: () => import('@/views/dashboard.vue'),
         meta: {
           title: '控制台',
-          icon: 'i-ep-house'
+          icon: 'ant-design:dashboard-outlined'
         }
       }
     ]
@@ -30,7 +30,8 @@ export default [
     name: 'System',
     component: Layout,
     meta: {
-      title: '系统管理'
+      title: '系统管理',
+      icon: 'ant-design:setting-outlined'
     },
     children: [
       {

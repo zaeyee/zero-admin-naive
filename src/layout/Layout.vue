@@ -13,11 +13,12 @@ const collapsed = ref(false)
       show-trigger
       width="210"
       collapse-mode="width"
+      :collapsed-width="64"
       :collapsed="collapsed"
       @collapse="collapsed = true"
       @expand="collapsed = false"
     >
-      <PageLogo />
+      <PageLogo :collapsed="collapsed" />
       <PageMenu :collapsed="collapsed" />
     </n-layout-sider>
     <n-layout>
