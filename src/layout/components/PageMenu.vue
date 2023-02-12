@@ -7,9 +7,9 @@ defineProps<{
   collapsed: boolean
 }>()
 
+const router = useRouter()
 const userStore = useUserStore()
 const menus = computed(() => generatorMenus(userStore.routes))
-const router = useRouter()
 
 const onItemClick = (key: string) => {
   isExternal(key) ? window.open(key) : router.push(key)

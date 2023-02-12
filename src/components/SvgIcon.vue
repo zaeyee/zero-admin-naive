@@ -2,10 +2,12 @@
 import { Icon } from '@iconify/vue'
 
 defineProps<{
-  name: unknown
+  name: string
 }>()
 </script>
 
 <template>
-  <Icon :icon="name" />
+  <n-icon>
+    <Icon :icon="name" />
+  </n-icon>
 </template>

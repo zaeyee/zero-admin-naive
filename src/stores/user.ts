@@ -10,10 +10,16 @@ export interface LoginForm {
   password: string
 }
 
+export interface UserProfile {
+  username?: string
+  nickname?: string
+  avatar?: string
+}
+
 export interface UserState {
   token: string
   roles: string[]
-  profile: unknown
+  profile: UserProfile
   routes: RouteRecordRaw[]
 }
 
@@ -39,7 +45,7 @@ export const useUserStore = defineStore('user', {
       const data = {
         roles: ['admin'],
         username: 'admin',
-        nickname: 'ADMIN'
+        nickname: '超级管理员'
       }
       const { roles, ...profile } = data
       if (!roles || roles.length <= 0) {

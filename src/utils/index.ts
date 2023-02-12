@@ -7,7 +7,7 @@ import { isExternal } from './validator'
 
 // 渲染图标
 export const renderIcon = (name: unknown) => {
-  if (!name) return
+  if (typeof name !== 'string') return
   return () => h(SvgIcon, { name })
 }
 

@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import PageLogo from './components/PageLogo.vue'
 import PageMenu from './components/PageMenu.vue'
-import PageHeader from './components/PageHeader.vue'
+import Hamburger from './components/Hamburger.vue'
+import Breadcrumb from './components/Breadcrumb.vue'
+import ToolRefresh from './components/ToolRefresh.vue'
+import ToolFullscreen from './components/ToolFullscreen.vue'
+import ToolAvatar from './components/ToolAvatar.vue'
+import ToolSetting from './components/ToolSetting.vue'
 
 const collapsed = ref(false)
 </script>
@@ -21,9 +26,18 @@ const collapsed = ref(false)
       <PageLogo :collapsed="collapsed" />
       <PageMenu :collapsed="collapsed" />
     </n-layout-sider>
-    <n-layout>
-      <n-layout-header>
-        <PageHeader />
+    <n-layout embedded>
+      <n-layout-header class="flex justify-between items-center h-$header-height px-1.6 shadow-2xl">
+        <div flex items-center>
+          <Hamburger v-model="collapsed" />
+          <Breadcrumb />
+        </div>
+        <div flex items-center>
+          <ToolRefresh />
+          <ToolFullscreen />
+          <ToolAvatar />
+          <ToolSetting />
+        </div>
       </n-layout-header>
       <n-layout-content content-style="padding: 15px;">
         <router-view />
