@@ -37,7 +37,7 @@ export default [
       {
         path: 'role',
         name: 'Role',
-        component: () => import('@/views/dashboard.vue'),
+        component: () => import('@/views/system/role.vue'),
         meta: {
           title: '角色管理'
         }
