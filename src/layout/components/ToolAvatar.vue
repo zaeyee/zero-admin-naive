@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useDialog } from 'naive-ui'
-
 import { renderIcon } from '@/utils/index'
 import { useUserStore } from '@/stores/user'
 

@@ -1,17 +1,23 @@
 <script setup lang="ts">
-import { RouteRecordRaw } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
+import { FormInst, NSpace, NButton } from 'naive-ui'
 
 import { renderIcon } from '@/utils/index'
 
 interface RowData {
-  id: string | number
+  id: string
   title: string
   path: string
   icon?: string
   children?: RowData[]
 }
 
-const router = useRouter()
+interface FormModel {
+  id?: string
+  title: string
+  path: string
+  icon?: string
+}
 
 // 表格
 const table = reactive({
@@ -25,13 +31,27 @@ const table = reactive({
       key: 'icon',
       title: '菜单图标',
       align: 'center',
-      render: (rowData: RowData) => rowData.icon && renderIcon(rowData.icon, { size: 18 })()
+      render: (row: RowData) => row.icon && renderIcon(row.icon, { size: 18 })()
     },
-    { key: 'operation', title: '操作', fixed: 'right' }
+    {
+      key: 'operation',
+      title: '操作',
+      fixed: 'right',
+      render: (row: RowData) =>
+        h(NSpace, () => [
+          h(
+            NButton,
+            { size: 'tiny', type: 'primary', secondary: true, 'on-click': () => showForm('编辑菜单', row) },
+            () => '编辑'
+          ),
+          h(NButton, { size: 'tiny', type: 'error', secondary: true }, () => '删除')
+        ])
+    }
   ],
   data: [] as RowData[]
 })
 
+const router = useRouter()
 const getMenus: (routes: RouteRecordRaw[]) => RowData[] = routes => {
   return routes.map(item => ({
     id: item.path,
@@ -41,32 +61,50 @@ const getMenus: (routes: RouteRecordRaw[]) => RowData[] = routes => {
     children: item.children?.length ? getMenus(item.children) : undefined
   }))
 }
-
 const initData = async () => {
-  table.data = getMenus(router.getRoutes().filter(item => item.children?.length))
+  try {
+    table.loading = true
+    table.data = getMenus(router.getRoutes().filter(item => item.children?.length))
+  } finally {
+    table.loading = false
+  }
 }
 
 initData()
 
 // 表单
+const formRef = ref<FormInst>()
 const form = reactive({
-  ref: {},
   show: false,
   loading: false,
   title: '',
-  items: [{ prop: 'name', label: '角色名称', type: 'input', attrs: { placeholder: '请输入角色名称' } }],
   rules: {
-    name: { required: true, message: '请输入角色名称' }
+    title: { required: true, message: '请输入菜单标题' },
+    path: { required: true, message: '请输入菜单路径' },
+    icon: { required: true, message: '请输入菜单图标' }
   },
-  model: {},
-  errors: {}
+  model: {} as FormModel
 })
-// 打开表单抽屉
-const openDrawer = (title: string, row = {}) => {
+// 显示表单
+const showForm = (title: string, row?: RowData) => {
   form.title = title
-  form.model = { ...row }
-  form.errors = {}
+  form.model = {
+    id: row?.id,
+    title: row?.title || '',
+    path: row?.path || '',
+    icon: row?.icon || ''
+  }
   form.show = true
+}
+// 提交表单
+const message = useMessage()
+const submitForm = async () => {
+  try {
+    await formRef.value?.validate()
+    message.success('Valid')
+  } catch {
+    message.error('Invalid')
+  }
 }
 </script>
 
@@ -76,12 +114,30 @@ const openDrawer = (title: string, row = {}) => {
       :columns="table.columns"
       :data="table.data"
       :row-key="table.rowKey"
-      @add="openDrawer('新增菜单')"
+      @add="showForm('新增菜单')"
       @reload="initData"
     />
 
-    <n-drawer v-model:show="form.show">
-      <n-drawer-content :title="form.title" :native-scrollbar="false"> </n-drawer-content>
+    <n-drawer v-model:show="form.show" width="420">
+      <n-drawer-content :title="form.title" :native-scrollbar="false" closable>
+        <n-form ref="formRef" :rules="form.rules">
+          <n-form-item label="菜单标题" path="title">
+            <n-input v-model:value="form.model.title" placeholder="请输入菜单标题"></n-input>
+          </n-form-item>
+          <n-form-item label="菜单路径" path="path">
+            <n-input v-model:value="form.model.path" placeholder="请输入菜单路径"></n-input>
+          </n-form-item>
+          <n-form-item label="菜单图标" path="icon">
+            <n-input v-model:value="form.model.icon" placeholder="请输入菜单图标"></n-input>
+          </n-form-item>
+        </n-form>
+        <template #footer>
+          <n-space>
+            <n-button @click="form.show = false">取消</n-button>
+            <n-button type="primary" @click="submitForm">确定</n-button>
+          </n-space>
+        </template>
+      </n-drawer-content>
     </n-drawer>
   </n-card>
 </template>
