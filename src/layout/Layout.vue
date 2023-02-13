@@ -9,6 +9,7 @@ import ToolAvatar from './components/ToolAvatar.vue'
 import ToolSetting from './components/ToolSetting.vue'
 
 const collapsed = ref(false)
+const headerFixed = ref(true)
 </script>
 
 <template>
@@ -17,6 +18,7 @@ const collapsed = ref(false)
       show-trigger
       width="210"
       collapse-mode="width"
+      class="shadow-lg z-2!"
       :collapsed-width="64"
       :collapsed="collapsed"
       @collapse="collapsed = true"
@@ -25,8 +27,11 @@ const collapsed = ref(false)
       <PageLogo :collapsed="collapsed" />
       <PageMenu :collapsed="collapsed" />
     </n-layout-sider>
-    <n-layout embedded>
-      <n-layout-header class="flex justify-between items-center h-$z-header-height px-1.6">
+    <n-layout :content-style="headerFixed && 'display: flex; flex-direction: column;'">
+      <n-layout-header
+        class="relative z-1 flex justify-between items-center h-$z-header-height px-1.6 shadow-sm"
+        :class="{ 'flex-none': headerFixed }"
+      >
         <div flex items-center>
           <Hamburger v-model="collapsed" />
           <Breadcrumb />
@@ -38,7 +43,7 @@ const collapsed = ref(false)
           <ToolSetting />
         </div>
       </n-layout-header>
-      <n-layout-content embedded content-style="padding: 10px">
+      <n-layout-content embedded content-style="padding: 12px; background: #f5f7f9">
         <router-view />
       </n-layout-content>
     </n-layout>
