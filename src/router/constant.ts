@@ -35,6 +35,14 @@ export default [
     },
     children: [
       {
+        path: 'menu',
+        name: 'Menu',
+        component: () => import('@/views/system/menu.vue'),
+        meta: {
+          title: '菜单管理'
+        }
+      },
+      {
         path: 'role',
         name: 'Role',
         component: () => import('@/views/system/role.vue'),
@@ -48,14 +56,6 @@ export default [
         component: () => import('@/views/dashboard.vue'),
         meta: {
           title: '用户管理'
-        }
-      },
-      {
-        path: 'menu',
-        name: 'Menu',
-        component: () => import('@/views/dashboard.vue'),
-        meta: {
-          title: '菜单管理'
         }
       }
     ]
