@@ -6,9 +6,8 @@ import SvgIcon from '@/components/SvgIcon.vue'
 import { isExternal } from './validator'
 
 // 渲染图标
-export const renderIcon = (name: unknown) => {
-  if (typeof name !== 'string') return
-  return () => h(SvgIcon, { name })
+export const renderIcon = (name: string, props = {}) => {
+  return () => h(SvgIcon, { name, ...props })
 }
 
 // 处理菜单的路径
@@ -23,7 +22,7 @@ const resolvePath = (path: string, basePath?: string) => {
 }
 
 // 基于路由生成菜单
-export const generatorMenus = (routes: RouteRecordRaw[], basePath = '/') => {
+export const generateMenus = (routes: RouteRecordRaw[], basePath = '/') => {
   const menus: MenuOption[] = []
   routes.forEach(item => {
     // 若指定隐藏则不显示
@@ -39,8 +38,8 @@ export const generatorMenus = (routes: RouteRecordRaw[], basePath = '/') => {
     menus.push({
       key: resolvePath(item.path, basePath),
       label: item.meta?.title,
-      icon: renderIcon(item.meta?.icon),
-      children: item.children?.length ? generatorMenus(item.children, item.path) : undefined
+      icon: typeof item.meta?.icon === 'string' ? renderIcon(item.meta.icon) : undefined,
+      children: item.children?.length ? generateMenus(item.children, item.path) : undefined
     })
   })
   return menus

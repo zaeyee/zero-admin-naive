@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { generatorMenus } from '@/utils/index'
+import { generateMenus } from '@/utils/index'
 
 const route = useRoute()
 const router = useRouter()
-const breadcrumbList = computed(() => generatorMenus(route.matched))
+const breadcrumbList = computed(() => generateMenus(route.matched))
 
 const onItemSelect = (key: string) => {
   router.push(key)
