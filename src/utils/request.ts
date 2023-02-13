@@ -30,7 +30,7 @@ service.interceptors.response.use(
     const { data } = response
     const userStore = useUserStore()
     // 处理自定义响应状态码
-    switch (data.status_code) {
+    switch (data.code) {
       case 200:
         // 响应正常返回响应数据
         return data

@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import type { RouteRecordRaw } from 'vue-router'
 import { FormInst, NSpace, NButton } from 'naive-ui'
 
+import { getMenus } from '@/api/menu'
 import { renderIcon } from '@/utils/index'
 
 interface RowData {
   id: string
-  title: string
   path: string
-  icon?: string
   children?: RowData[]
+  meta?: {
+    title: string
+    icon?: string
+  }
 }
 
 interface FormModel {
@@ -25,13 +27,13 @@ const table = reactive({
   rowKey: (row: RowData) => row.id,
   columns: [
     { type: 'selection', width: 50 },
-    { key: 'title', title: '菜单标题' },
+    { key: 'title', title: '菜单标题', render: (row: RowData) => row.meta?.title },
     { key: 'path', title: '菜单路径' },
     {
       key: 'icon',
       title: '菜单图标',
       align: 'center',
-      render: (row: RowData) => row.icon && renderIcon(row.icon, { size: 18 })()
+      render: (row: RowData) => row.meta?.icon && renderIcon(row.meta.icon, { size: 18 })()
     },
     {
       key: 'operation',
@@ -51,20 +53,11 @@ const table = reactive({
   data: [] as RowData[]
 })
 
-const router = useRouter()
-const getMenus: (routes: RouteRecordRaw[]) => RowData[] = routes => {
-  return routes.map(item => ({
-    id: item.path,
-    title: item.meta?.title as string,
-    path: item.path,
-    icon: item.meta?.icon as string,
-    children: item.children?.length ? getMenus(item.children) : undefined
-  }))
-}
 const initData = async () => {
   try {
     table.loading = true
-    table.data = getMenus(router.getRoutes().filter(item => item.children?.length))
+    const { data } = await getMenus()
+    table.data = data
   } finally {
     table.loading = false
   }
@@ -90,9 +83,9 @@ const showForm = (title: string, row?: RowData) => {
   form.title = title
   form.model = {
     id: row?.id,
-    title: row?.title || '',
+    title: row?.meta?.title || '',
     path: row?.path || '',
-    icon: row?.icon || ''
+    icon: row?.meta?.icon || ''
   }
   form.show = true
 }
@@ -114,6 +107,7 @@ const submitForm = async () => {
       :columns="table.columns"
       :data="table.data"
       :row-key="table.rowKey"
+      :loading="table.loading"
       @add="showForm('新增菜单')"
       @reload="initData"
     />
