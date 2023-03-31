@@ -1,10 +1,10 @@
 import axios from 'axios'
-import config from '@/config'
+import { network } from '@/config/index'
 import { useUserStore } from '@/stores/user'
 
 const service = axios.create({
-  baseURL: config.network.baseURL,
-  timeout: config.network.timeout
+  baseURL: network.baseURL,
+  timeout: network.timeout
 })
 
 // 请求拦截器
@@ -14,12 +14,13 @@ service.interceptors.request.use(
     const userStore = useUserStore()
     const token = userStore.token || localStorage.getItem('token')
     if (token) {
-      config.headers['Authorization'] = token || ''
+      config.headers['Authorization'] = token
     }
     return config
   },
   error => {
     // 处理请求错误
+    window.$message.error(error.message)
     return Promise.reject(error)
   }
 )
@@ -28,6 +29,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     const { data } = response
+    const router = useRouter()
     const userStore = useUserStore()
     // 处理自定义响应状态码
     switch (data.code) {
@@ -37,17 +39,38 @@ service.interceptors.response.use(
       case 401:
         // 处理token无效情况
         userStore.logout()
-        console.log('token无效')
+        window.$message.error('请先登录')
+        router.replace('/login')
         break
-      case 500:
+      case 422:
+        // 处理参数错误情况
+        window.$message.error(data.message)
+        break
+      default:
         // 处理服务器错误情况
-        console.log('服务器错误')
+        window.$dialog.error({
+          title: 'Error: ' + data.code,
+          content: data.message,
+          closeOnEsc: false,
+          maskClosable: false
+        })
         break
     }
     return Promise.reject(data.message || 'Error')
   },
   error => {
     // 处理网络超时或http状态码非200
+    const message = error.response?.data?.message
+    if (message) {
+      window.$message.error(message)
+    } else {
+      window.$dialog.error({
+        title: error.name,
+        content: error.message,
+        closeOnEsc: false,
+        maskClosable: false
+      })
+    }
     return Promise.reject(error)
   }
 )

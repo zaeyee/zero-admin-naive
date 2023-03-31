@@ -1,5 +1,7 @@
+import naive from 'naive-ui'
 import App from './App.vue'
 import router from './router'
+import setupNaiveUI from './utils/naive-ui'
 
 import '@unocss/reset/tailwind.css'
 import 'uno.css'
@@ -7,11 +9,9 @@ import 'uno.css'
 const app = createApp(App)
 const pinia = createPinia()
 
-// 处理tailwind的reset样式和naive-ui中button等组件样式冲突
-const meta = document.createElement('meta')
-meta.name = 'naive-ui-style'
-document.head.appendChild(meta)
+setupNaiveUI()
 
 app.use(router)
 app.use(pinia)
+app.use(naive)
 app.mount('#app')

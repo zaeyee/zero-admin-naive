@@ -7,7 +7,12 @@ defineEmits(['update:modelValue'])
 </script>
 
 <template>
-  <button z-icon-btn @click="$emit('update:modelValue', !modelValue)">
-    <SvgIcon :name="modelValue ? 'ant-design:menu-unfold-outlined' : 'ant-design:menu-fold-outlined'" :size="20" />
+  <button
+    z-icon-btn
+    transition="transform duration-300"
+    :class="{ 'rotate-z-180': modelValue }"
+    @click="$emit('update:modelValue', !modelValue)"
+  >
+    <SvgIcon name="ant-design:menu-fold-outlined" :size="20" />
   </button>
 </template>

@@ -1,9 +1,10 @@
-export const successResult = (data: unknown) => ({
+export const successResult = (data: unknown, message = 'success') => ({
   code: 200,
+  message,
   data
 })
 
-export const failResult = (msg: string) => ({
-  code: 400,
-  msg
+export const failResult = (message: string, code = 400) => ({
+  code,
+  message
 })

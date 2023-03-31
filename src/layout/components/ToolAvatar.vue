@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { renderIcon } from '@/utils/index'
+import { icon } from '@/utils/index'
 import { useUserStore } from '@/stores/user'
 
 const dialog = useDialog()
@@ -8,12 +8,12 @@ const router = useRouter()
 const userStore = useUserStore()
 const profile = userStore.profile
 
-const userOptions = reactive([
-  { key: 'space', label: '个人中心', icon: renderIcon('ant-design:user-outlined') },
-  { key: 'logout', label: '退出登录', icon: renderIcon('ant-design:logout-outlined') }
+const dropdownOptions = reactive([
+  { key: 'space', label: '个人中心', icon: icon('ant-design:user-outlined') },
+  { key: 'logout', label: '退出登录', icon: icon('ant-design:logout-outlined') }
 ])
 
-const onUserSelect = (key: string) => {
+const dropdownSelect = (key: string) => {
   switch (key) {
     case 'space':
       break
@@ -35,10 +35,10 @@ const onUserSelect = (key: string) => {
 </script>
 
 <template>
-  <n-dropdown :options="userOptions" @select="onUserSelect">
+  <n-dropdown :options="dropdownOptions" @select="dropdownSelect">
     <div z-clickable flex items-center px-1.6 py-1 rounded>
-      <n-avatar :src="profile.avatar" size="small" round>
-        <SvgIcon name="ant-design:user-outlined" />
+      <n-avatar :src="profile.avatarUrl" size="small" round>
+        <SvgIcon v-if="!profile.avatarUrl" name="ant-design:user-outlined" />
       </n-avatar>
       <span class="m-l-1.6">{{ profile.nickname || profile.username }}</span>
     </div>

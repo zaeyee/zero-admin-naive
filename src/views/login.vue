@@ -11,8 +11,8 @@ const formRef = ref<FormInst>()
 const loading = ref(false)
 
 const model = ref<LoginForm>({
-  username: '',
-  password: ''
+  username: 'admin',
+  password: '123456'
 })
 
 const rules: FormRules = {
@@ -37,20 +37,20 @@ const login = async () => {
 
 <template>
   <div fixed w-full h-full flex justify-center items-center>
-    <div class="w-240" flex shadow-2xl rounded>
-      <div class="w-60%" flex-none bg-blue p-16>
+    <div w-210 flex shadow-2xl rounded>
+      <div w-115 flex-none bg-blue p-16>
         <img src="@/assets/bg_login.png" />
       </div>
-      <n-spin :show="loading" flex-1 p-8>
+      <n-spin :show="loading" class="flex-1 p-8 b-t-4">
         <div text-3xl>登录</div>
-        <n-form ref="formRef" :model="model" :rules="rules">
-          <n-form-item path="username">
+        <n-form ref="formRef" :model="model" :rules="rules" class="mt-12">
+          <n-form-item path="username" label="用户名">
             <n-input v-model:value="model.username" size="large" placeholder="请输入用户名" />
           </n-form-item>
-          <n-form-item path="password">
+          <n-form-item path="password" label="密码">
             <n-input v-model:value="model.password" size="large" placeholder="请输入密码" type="password" />
           </n-form-item>
-          <n-button type="primary" size="large" block @click="login">登录</n-button>
+          <n-button type="primary" size="large" block class="mt-4!" @click="login">登录</n-button>
         </n-form>
       </n-spin>
     </div>

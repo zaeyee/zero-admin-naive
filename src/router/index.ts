@@ -1,6 +1,10 @@
+import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
+import { useTitle } from '@vueuse/core'
 import { useUserStore } from '@/stores/user'
-import constantRoutes from './constant'
+import { filterRoutes } from '@/utils/auth'
+import constantRoutes from './constantRoutes'
+import asyncRoutes from './asyncRoutes'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -9,6 +13,7 @@ const router = createRouter({
 
 // 全局前置守卫
 router.beforeEach(async (to, _from, next) => {
+  window.$loadingBar.start()
   const userStore = useUserStore()
   // 若已有token
   if (userStore.token) {
@@ -23,13 +28,15 @@ router.beforeEach(async (to, _from, next) => {
         // 未获取用户角色列表，则先获取
         try {
           // 获取用户信息
-          const { roles } = await userStore.getInfo()
+          await userStore.getInfo()
 
           // 基于角色生成可访问的异步路由
-          const asyncRoutes = userStore.generateRoutes(roles)
+          const accessAsyncRoutes = filterRoutes(asyncRoutes, userStore.roles)
+          // 保存合并后的路由表
+          userStore.routes = [...constantRoutes, ...accessAsyncRoutes]
 
           // 动态添加可访问的异步路由
-          asyncRoutes.forEach(item => router.addRoute(item))
+          accessAsyncRoutes.forEach((item: RouteRecordRaw) => router.addRoute(item))
 
           //设置replace为true，这样导航就不会留下历史记录
           next({ ...to, replace: true })
@@ -52,6 +59,11 @@ router.beforeEach(async (to, _from, next) => {
       next('/login?redirect=' + to.fullPath)
     }
   }
+})
+
+router.afterEach(to => {
+  useTitle([to.meta?.title, 'Zero Admin Naive'].join(' - '))
+  window.$loadingBar.finish()
 })
 
 export default router

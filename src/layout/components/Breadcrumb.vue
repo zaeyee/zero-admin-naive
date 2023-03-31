@@ -1,28 +1,29 @@
 <script setup lang="ts">
-import { generateMenus } from '@/utils/index'
+import { generateBreadcrumbs } from '@/utils/index'
 
 const route = useRoute()
 const router = useRouter()
-const breadcrumbList = computed(() => generateMenus(route.matched))
 
-const onItemSelect = (key: string) => {
-  router.push(key)
+const list = computed(() => generateBreadcrumbs(route.matched))
+
+const dropdownSelect = (key: string) => {
+  router.push({ name: key })
 }
 </script>
 
 <template>
   <n-breadcrumb>
-    <n-breadcrumb-item v-for="item in breadcrumbList" :key="item.key">
-      <n-dropdown v-if="item.children?.length" :options="item.children" show-arrow @select="onItemSelect">
+    <n-breadcrumb-item v-for="(item, index) in list" :key="item.key" :clickable="index !== list.length - 1">
+      <n-dropdown v-if="item.children?.length" :options="item.children" show-arrow @select="dropdownSelect">
         <span>
           <component :is="item.icon" />
           {{ item.label }}
         </span>
       </n-dropdown>
-      <span v-else>
+      <template v-else>
         <component :is="item.icon" />
         {{ item.label }}
-      </span>
+      </template>
     </n-breadcrumb-item>
   </n-breadcrumb>
 </template>
