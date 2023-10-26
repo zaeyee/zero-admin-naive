@@ -6,6 +6,7 @@ const dialog = useDialog()
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+
 const profile = userStore.profile
 
 const dropdownOptions = reactive([
@@ -13,7 +14,7 @@ const dropdownOptions = reactive([
   { key: 'logout', label: '退出登录', icon: icon('ant-design:logout-outlined') }
 ])
 
-const dropdownSelect = (key: string) => {
+const onDropdownSelect = (key: string) => {
   switch (key) {
     case 'space':
       break
@@ -25,7 +26,7 @@ const dropdownSelect = (key: string) => {
         positiveText: '确定',
         negativeText: '取消',
         onPositiveClick: () => {
-          userStore.logout()
+          userStore.clear()
           router.push('/login?redirect=' + route.fullPath)
         }
       })
@@ -35,8 +36,8 @@ const dropdownSelect = (key: string) => {
 </script>
 
 <template>
-  <n-dropdown :options="dropdownOptions" @select="dropdownSelect">
-    <div z-clickable flex items-center px-1.6 py-1 rounded>
+  <n-dropdown :options="dropdownOptions" @select="onDropdownSelect">
+    <div class="u-clickable flex items-center px-1.6 py-1 rounded">
       <n-avatar :src="profile.avatarUrl" size="small" round>
         <SvgIcon v-if="!profile.avatarUrl" name="ant-design:user-outlined" />
       </n-avatar>

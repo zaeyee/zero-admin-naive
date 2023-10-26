@@ -10,7 +10,6 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
   config => {
-    // 请求前，附加token到headers上
     const userStore = useUserStore()
     const token = userStore.token || localStorage.getItem('token')
     if (token) {
@@ -19,7 +18,6 @@ service.interceptors.request.use(
     return config
   },
   error => {
-    // 处理请求错误
     window.$message.error(error.message)
     return Promise.reject(error)
   }
@@ -28,38 +26,38 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   response => {
-    const { data } = response
+    const { code, message, data } = response.data
     const router = useRouter()
     const userStore = useUserStore()
     // 处理自定义响应状态码
-    switch (data.code) {
+    switch (code) {
       case 200:
         // 响应正常返回响应数据
         return data
       case 401:
         // 处理token无效情况
-        userStore.logout()
+        userStore.clear()
         window.$message.error('请先登录')
         router.replace('/login')
         break
       case 422:
         // 处理参数错误情况
-        window.$message.error(data.message)
+        window.$message.error(message)
         break
       default:
         // 处理服务器错误情况
         window.$dialog.error({
-          title: 'Error: ' + data.code,
-          content: data.message,
+          title: 'Error: ' + code,
+          content: message,
           closeOnEsc: false,
           maskClosable: false
         })
         break
     }
-    return Promise.reject(data.message || 'Error')
+    return Promise.reject(message || 'Response Error')
   },
   error => {
-    // 处理网络超时或http状态码非200
+    // 处理网络超时或http状态码非2xx
     const message = error.response?.data?.message
     if (message) {
       window.$message.error(message)

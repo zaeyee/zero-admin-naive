@@ -1,7 +1,5 @@
 <script lang="ts">
-export default {
-  inheritAttrs: false
-}
+export default { inheritAttrs: false }
 </script>
 
 <script setup lang="ts">
@@ -10,9 +8,9 @@ import { icon } from '@/utils/index'
 
 const props = defineProps<{
   searchOptions?: []
-  page: number
-  pageSize: number
-  itemCount: number
+  page?: number
+  pageSize?: number
+  itemCount?: number
 }>()
 
 const emit = defineEmits(['add', 'reload', 'update:page', 'update:pageSize'])
@@ -42,11 +40,11 @@ const { page, pageSize } = useVModels(props, emit)
       <n-tooltip>
         <template #trigger>
           <n-button
-            secondary
-            circle
+            :render-icon="icon('ant-design:reload-outlined', { size: 16 })"
             type="primary"
             size="small"
-            :render-icon="icon('ant-design:reload-outlined', { size: 16 })"
+            secondary
+            circle
             @click="$emit('reload')"
           />
         </template>
@@ -55,10 +53,10 @@ const { page, pageSize } = useVModels(props, emit)
       <n-tooltip>
         <template #trigger>
           <n-button
+            :type="bordered ? 'primary' : 'default'"
+            size="small"
             secondary
             circle
-            size="small"
-            :type="bordered ? 'primary' : 'default'"
             @click="bordered = !bordered"
           >
             B
@@ -68,7 +66,7 @@ const { page, pageSize } = useVModels(props, emit)
       </n-tooltip>
       <n-tooltip>
         <template #trigger>
-          <n-button secondary circle size="small" :type="striped ? 'primary' : 'default'" @click="striped = !striped">
+          <n-button :type="striped ? 'primary' : 'default'" size="small" secondary circle @click="striped = !striped">
             S
           </n-button>
         </template>
@@ -78,11 +76,11 @@ const { page, pageSize } = useVModels(props, emit)
         <template #trigger>
           <n-popselect v-model:value="size" :options="sizeOptions" trigger="click">
             <n-button
-              secondary
-              circle
+              :render-icon="icon('ant-design:column-height-outlined', { size: 16 })"
               type="primary"
               size="small"
-              :render-icon="icon('ant-design:column-height-outlined', { size: 16 })"
+              secondary
+              circle
             />
           </n-popselect>
         </template>

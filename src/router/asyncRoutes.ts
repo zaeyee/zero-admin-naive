@@ -4,7 +4,7 @@ import Layout from '@/layout/Layout.vue'
 const asyncRoutes: RouteRecordRaw[] = [
   {
     path: '/system',
-    name: 'System',
+    name: 'system',
     component: Layout,
     meta: {
       title: '系统管理',
@@ -14,7 +14,7 @@ const asyncRoutes: RouteRecordRaw[] = [
     children: [
       {
         path: 'role',
-        name: 'Role',
+        name: 'role',
         component: () => import('@/views/system/role.vue'),
         meta: {
           title: '角色管理'
@@ -22,7 +22,7 @@ const asyncRoutes: RouteRecordRaw[] = [
       },
       {
         path: 'user',
-        name: 'User',
+        name: 'user',
         component: () => import('@/views/system/user.vue'),
         meta: {
           title: '用户管理'

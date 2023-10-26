@@ -32,7 +32,7 @@ watch(
 </script>
 
 <template>
-  <n-upload v-model:file-list="fileList" list-type="image-card" :max="1" @finish="onFinish" @remove="onRemove">
+  <n-upload v-model:file-list="fileList" :max="1" list-type="image-card" @finish="onFinish" @remove="onRemove">
     <slot></slot>
   </n-upload>
 </template>

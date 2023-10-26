@@ -11,7 +11,6 @@ const collapsed = ref(false)
 const headerFixed = ref(true)
 const isRouterAlive = ref(true)
 
-// 重新加载当前页面
 const reload = () => {
   window.$loadingBar.start()
   setTimeout(() => {

@@ -8,8 +8,7 @@ defineEmits(['update:modelValue'])
 
 <template>
   <button
-    z-icon-btn
-    transition="transform duration-300"
+    class="u-icon-btn duration-300"
     :class="{ 'rotate-z-180': modelValue }"
     @click="$emit('update:modelValue', !modelValue)"
   >

@@ -5,7 +5,7 @@ const { isFullscreen, toggle } = useFullscreen()
 </script>
 
 <template>
-  <button z-icon-btn @click="toggle">
+  <button class="u-icon-btn" @click="toggle">
     <SvgIcon
       :name="isFullscreen ? 'ant-design:fullscreen-exit-outlined' : 'ant-design:fullscreen-outlined'"
       :size="20"

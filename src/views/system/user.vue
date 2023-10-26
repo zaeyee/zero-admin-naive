@@ -1,13 +1,13 @@
 <script setup lang="ts">
+import type { UserModel, UserRow } from '@/types/user'
 import { DataTableColumns, FormInst, FormRules, NTag, NSpace, NButton } from 'naive-ui'
-import { UserModel, UserRow, getUsers, createUser, updateUser, deleteUser } from '@/api/user'
+import { fetchUsers, createUser, updateUser, deleteUser } from '@/api/user'
 
 const message = useMessage()
 const dialog = useDialog()
 
 const statuses = ['禁用', '正常']
 
-// 表格
 const table = reactive({
   loading: false,
   rowKey: (row: UserRow) => row._id,
@@ -46,21 +46,19 @@ const table = reactive({
   pageSize: 10,
   total: 0
 })
-// 初始化数据
-const initData = async () => {
+const loadUsers = async () => {
   try {
     table.loading = true
-    const { data } = await getUsers(table.page, table.pageSize)
-    table.data = data.list
-    table.total = data.total
+    const { list, total } = await fetchUsers(table.page, table.pageSize)
+    table.data = list
+    table.total = total
   } finally {
     table.loading = false
   }
 }
 
-initData()
+loadUsers()
 
-// 表单
 const formRef = ref<FormInst>()
 const form = reactive({
   show: false,
@@ -72,13 +70,11 @@ const form = reactive({
   } as FormRules,
   model: {} as UserModel
 })
-// 显示表单
 const showForm = async (title: string, row?: UserRow) => {
   form.title = title
   form.model = row?._id ? { ...row } : ({ status: 1 } as UserModel)
   form.show = true
 }
-// 提交表单
 const submitForm = async () => {
   try {
     form.loading = true
@@ -90,13 +86,12 @@ const submitForm = async () => {
     }
     message.success(form.title + '成功')
     form.show = false
-    initData()
+    loadUsers()
   } finally {
     form.loading = false
   }
 }
 
-// 删除一项
 const deleteItem = (_id?: string) => {
   if (!_id) return
   const d = dialog.warning({
@@ -109,7 +104,7 @@ const deleteItem = (_id?: string) => {
         d.loading = true
         await deleteUser(_id)
         message.success('删除成功')
-        initData()
+        loadUsers()
       } catch (error) {
         d.loading = false
         message.error('删除失败')
@@ -130,7 +125,7 @@ const deleteItem = (_id?: string) => {
       :row-key="table.rowKey"
       :loading="table.loading"
       @add="showForm('新增用户')"
-      @reload="initData"
+      @reload="loadUsers"
     />
 
     <n-drawer v-model:show="form.show" width="420px">

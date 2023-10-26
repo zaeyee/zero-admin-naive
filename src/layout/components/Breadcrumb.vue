@@ -6,7 +6,7 @@ const router = useRouter()
 
 const list = computed(() => generateBreadcrumbs(route.matched))
 
-const dropdownSelect = (key: string) => {
+const onDropdownSelect = (key: string) => {
   router.push({ name: key })
 }
 </script>
@@ -14,7 +14,7 @@ const dropdownSelect = (key: string) => {
 <template>
   <n-breadcrumb>
     <n-breadcrumb-item v-for="(item, index) in list" :key="item.key" :clickable="index !== list.length - 1">
-      <n-dropdown v-if="item.children?.length" :options="item.children" show-arrow @select="dropdownSelect">
+      <n-dropdown v-if="item.children?.length" :options="item.children" show-arrow @select="onDropdownSelect">
         <span>
           <component :is="item.icon" />
           {{ item.label }}

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { FormInst, FormRules } from 'naive-ui'
-import { useUserStore, LoginForm } from '@/stores/user'
+import type { FormInst, FormRules } from 'naive-ui'
+import type { LoginModel } from '@/types/user'
+import { useUserStore } from '@/stores/user'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -10,7 +11,7 @@ const redirect = computed(() => (route.query.redirect || '/') as string)
 const formRef = ref<FormInst>()
 const loading = ref(false)
 
-const model = ref<LoginForm>({
+const model = ref<LoginModel>({
   username: 'admin',
   password: '123456'
 })
@@ -36,13 +37,13 @@ const login = async () => {
 </script>
 
 <template>
-  <div fixed w-full h-full flex justify-center items-center>
-    <div w-210 flex shadow-2xl rounded>
-      <div w-115 flex-none bg-blue p-16>
+  <div class="fixed w-full h-full flex justify-center items-center">
+    <div class="w-210 flex shadow-2xl rounded">
+      <div class="w-115 flex-none bg-blue p-16">
         <img src="@/assets/bg_login.png" />
       </div>
       <n-spin :show="loading" class="flex-1 p-8 b-t-4">
-        <div text-3xl>登录</div>
+        <div class="text-3xl">登录</div>
         <n-form ref="formRef" :model="model" :rules="rules" class="mt-12">
           <n-form-item path="username" label="用户名">
             <n-input v-model:value="model.username" size="large" placeholder="请输入用户名" />

@@ -21,8 +21,8 @@ export default defineConfig({
     })
   ],
   shortcuts: {
-    'z-clickable': 'transition-colors duration-300 cursor-pointer hover:bg-#f5f5f5 active:bg-#eee',
-    'z-icon-btn': 'z-clickable p-1.5 mx-1 text-0 rounded-full'
+    'u-clickable': 'transition-colors duration-300 cursor-pointer hover:bg-#f5f5f5 active:bg-#eee',
+    'u-icon-btn': 'u-clickable p-1.5 mx-1 text-0 rounded-full'
   },
   transformers: [transformerDirectives(), transformerVariantGroup()]
 })
