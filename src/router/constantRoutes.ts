@@ -21,7 +21,7 @@ const constantRoutes: RouteRecordRaw[] = [
         name: 'Dashboard',
         component: () => import('@/views/dashboard.vue'),
         meta: {
-          title: '控制台',
+          title: '仪表盘',
           icon: 'ant-design:dashboard-outlined'
         }
       }
