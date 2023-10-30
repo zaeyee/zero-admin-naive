@@ -25,7 +25,7 @@ export const useUserStore = defineStore('user', {
     },
     // 加载登录信息
     async loadMe() {
-      const { roles, profile } = await fetchMe()
+      const { roles, ...profile } = await fetchMe()
       if (!roles || roles.length <= 0) {
         throw new Error('用户至少需要有一个角色')
       }

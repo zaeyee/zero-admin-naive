@@ -1,8 +1,7 @@
-import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 import { useTitle } from '@vueuse/core'
 import { useUserStore } from '@/stores/user'
-import { filterRoutes } from '@/utils/auth'
+import { filterRoutes } from '@/utils/index'
 import constantRoutes from './constantRoutes'
 import asyncRoutes from './asyncRoutes'
 
@@ -11,7 +10,6 @@ const router = createRouter({
   routes: constantRoutes
 })
 
-// 免登录白名单
 const whiteList = ['/login']
 
 // 全局前置守卫
@@ -22,7 +20,7 @@ router.beforeEach(async (to, _from, next) => {
     if (to.path === '/login') {
       next({ path: '/' })
     } else {
-      if (userStore.roles && userStore.roles.length) {
+      if (userStore.roles?.length) {
         next()
       } else {
         try {
@@ -32,7 +30,7 @@ router.beforeEach(async (to, _from, next) => {
           // 保存合并后的路由表
           userStore.routes = [...constantRoutes, ...accessAsyncRoutes]
           // 动态添加可访问的异步路由
-          accessAsyncRoutes.forEach((item: RouteRecordRaw) => router.addRoute(item))
+          accessAsyncRoutes.forEach(route => router.addRoute(route))
           next({ ...to, replace: true })
         } catch (error) {
           userStore.clear()

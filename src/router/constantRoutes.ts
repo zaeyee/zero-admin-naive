@@ -26,6 +26,26 @@ const constantRoutes: RouteRecordRaw[] = [
         }
       }
     ]
+  },
+  {
+    path: '/examples',
+    name: 'examples',
+    component: Layout,
+    meta: {
+      title: '功能示例',
+      icon: 'ant-design:appstore-outlined',
+      auth: ['admin']
+    },
+    children: [
+      {
+        path: 'permission',
+        name: 'permission',
+        component: () => import('@/views/examples/permission.vue'),
+        meta: {
+          title: '权限校验'
+        }
+      }
+    ]
   }
 ]
 

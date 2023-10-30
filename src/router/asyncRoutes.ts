@@ -13,14 +13,6 @@ const asyncRoutes: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: 'role',
-        name: 'role',
-        component: () => import('@/views/system/role.vue'),
-        meta: {
-          title: '角色管理'
-        }
-      },
-      {
         path: 'user',
         name: 'user',
         component: () => import('@/views/system/user.vue'),

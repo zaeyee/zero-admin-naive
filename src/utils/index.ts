@@ -21,6 +21,22 @@ const resolvePath = (path: string, basePath?: string) => {
   return resolve(basePath, path)
 }
 
+// 基于角色过滤出可访问的路由
+export const filterRoutes = (routes: RouteRecordRaw[], roles: string[]) => {
+  const newRoutes: RouteRecordRaw[] = []
+  routes.forEach((route: RouteRecordRaw) => {
+    const auth = route.meta?.auth
+    if (!auth || roles.some(role => auth.includes(role))) {
+      const newRoute = { ...route }
+      if (newRoute.children) {
+        newRoute.children = filterRoutes(newRoute.children, roles)
+      }
+      newRoutes.push(newRoute)
+    }
+  })
+  return newRoutes
+}
+
 // 基于路由生成菜单
 export const generateMenus = (routes: RouteRecordRaw[], basePath = '/') => {
   const menus: MenuOption[] = []

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { UserModel, UserRow } from '@/types/user'
-import { DataTableColumns, FormInst, FormRules, NTag, NSpace, NButton } from 'naive-ui'
+import { DataTableColumns, FormInst, FormRules, NTag, NSpace, NButton, NAvatar } from 'naive-ui'
 import { fetchUsers, createUser, updateUser, deleteUser } from '@/api/user'
 
 const message = useMessage()
@@ -13,14 +13,33 @@ const table = reactive({
   rowKey: (row: UserRow) => row._id,
   columns: [
     { type: 'selection', width: 50 },
-    { key: '_id', title: 'ID' },
+    {
+      key: 'avatarUrl',
+      title: '头像',
+      width: 55,
+      render: (row: UserRow) => h(NAvatar, { src: row.avatarUrl, size: 'small', lazy: true, round: true })
+    },
     { key: 'username', title: '用户名' },
+    { key: 'nickname', title: '昵称' },
+    { key: 'email', title: '邮箱' },
+    {
+      key: 'roles',
+      title: '角色',
+      render: (row: UserRow) =>
+        h(NSpace, () => row.roles.map(role => h(NTag, { type: 'info', size: 'small', bordered: false }, () => role)))
+    },
     {
       key: 'status',
       title: '状态',
+      width: 60,
       render: (row: UserRow) =>
-        h(NTag, { size: 'small', type: row.status === 1 ? 'primary' : 'info' }, () => statuses[row.status])
+        h(
+          NTag,
+          { type: row.status === 1 ? 'success' : 'error', size: 'small', bordered: false, round: true },
+          () => statuses[row.status]
+        )
     },
+    { key: 'createdAt', title: '创建时间' },
     {
       key: 'operation',
       title: '操作',
@@ -28,16 +47,8 @@ const table = reactive({
       fixed: 'right',
       render: (row: UserRow) =>
         h(NSpace, () => [
-          h(
-            NButton,
-            { size: 'tiny', type: 'primary', secondary: true, 'on-click': () => showForm('编辑用户', row) },
-            () => '编辑'
-          ),
-          h(
-            NButton,
-            { size: 'tiny', type: 'error', secondary: true, 'on-click': () => deleteItem(row._id) },
-            () => '删除'
-          )
+          h(NButton, { type: 'primary', size: 'tiny', onClick: () => showForm('编辑用户', row) }, () => '编辑'),
+          h(NButton, { type: 'error', size: 'tiny', onClick: () => deleteItem(row._id) }, () => '删除')
         ])
     }
   ] as DataTableColumns,
